@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Supplies</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div id="navbar-container"></div>
+    <script>
+        fetch("navbar.html")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Navbar failed to load");
+                }
+                return response.text();
+            })
+            .then(data => document.getElementById("navbar-container").innerHTML = data)
+            .catch(error => console.error("Error loading navbar:", error));
+    </script>
+    
+
+    <h2>Order Supplies</h2>
+
+    <form onsubmit="submitOrder(event)">
+        <label for="employee_id">Employee ID:</label>
+        <input type="number" id="employee_id" required> <!-- Linking employee -->
+
+        <label for="item">Item:</label>
+        <input type="text" id="item" required>
+
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" required>
+
+        <input type="submit" value="Order">
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+
+    <script>
+        async function submitOrder(event) {
+            event.preventDefault();
+
+            const employee_id = document.getElementById("employee_id").value;
+            const item = document.getElementById("item").value;
+            const quantity = document.getElementById("quantity").value;
+
+            // Ensure all fields are filled
+            if (!employee_id || !item || !quantity) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            // Insert order into Supabase
+            const { error } = await supabase.from("orders").insert([
+                { employee_id, item, quantity }
+            ]);
+
+            if (error) {
+                console.error("Error placing order:", error);
+                alert("Failed to place order. Check console for details.");
+                return;
+            }
+
+            alert("Order placed successfully!");
+            document.getElementById("employee_id").value = "";
+            document.getElementById("item").value = "";
+            document.getElementById("quantity").value = "";
+        }
+    </script>
+
+</body>
+</html>

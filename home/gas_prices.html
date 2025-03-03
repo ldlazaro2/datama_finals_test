@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gas Prices</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div id="navbar-container"></div>
+    <script>
+        fetch("navbar.html")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Navbar failed to load");
+                }
+                return response.text();
+            })
+            .then(data => document.getElementById("navbar-container").innerHTML = data)
+            .catch(error => console.error("Error loading navbar:", error));
+    </script>
+
+    <!-- Gas Prices Section -->
+    <h2>Gas Prices</h2>
+    <div id="gasPrices"></div>
+
+    <script>
+        function loadGasPrices() {
+            const gasPrices = [
+                { type: "Regular", price_per_liter: 58.25 },
+                { type: "Premium", price_per_liter: 62.80 },
+                { type: "Diesel", price_per_liter: 55.10 }
+            ];
+
+            const gasImages = {
+                "Regular": "images/regular_gas.jpg",
+                "Premium": "images/premium_gas.jpg",
+                "Diesel": "images/diesel_gas.jpg"
+            };
+
+            document.getElementById("gasPrices").innerHTML = gasPrices.map(price => `
+                <div class="gas-card">
+                    <img src="${gasImages[price.type] || 'images/default_gas.jpg'}" alt="${price.type}" class="gas-img">
+                    <p><strong>${price.type}</strong></p>
+                    <p>Price: ₱${price.price_per_liter.toFixed(2)} per liter</p>
+                    <a href="order.html" class="btn">Order Now</a>
+                    <a href="transactions.html" class="btn">View Transactions</a>
+                </div>
+            `).join("");
+        }
+
+        loadGasPrices();
+    </script>
+
+</body>
+</html>
+

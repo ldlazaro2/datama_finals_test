@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div id="navbar-container"></div>
+    <script>
+        fetch("navbar.html")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Navbar failed to load");
+                }
+                return response.text();
+            })
+            .then(data => document.getElementById("navbar-container").innerHTML = data)
+            .catch(error => console.error("Error loading navbar:", error));
+    </script>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-container">
+        <h2>Employee Dashboard</h2>
+        <p>Select an option below:</p>
+
+        <div class="dashboard-options">
+            <button onclick="window.location.href='order.html'">🛒 Order Supplies</button>
+            <button onclick="window.location.href='transactions.html'">💰 View Transactions</button>
+            <button onclick="window.location.href='orders.html'">📦 View Orders</button>
+        </div>
+    </div>
+
+</body>
+</html>

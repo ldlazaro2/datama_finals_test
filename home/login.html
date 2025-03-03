@@ -1,0 +1,55 @@
+<!-- login.html - Employee Login -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div id="navbar-container"></div>
+<script>
+    fetch("navbar.html")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Navbar failed to load");
+            }
+            return response.text();
+        })
+        .then(data => document.getElementById("navbar-container").innerHTML = data)
+        .catch(error => console.error("Error loading navbar:", error));
+</script>
+
+
+    <h2>Employee Login</h2>
+    <form onsubmit="login(event)">
+        <label for="username">Username:</label>
+        <input type="text" id="username" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" required>
+        <input type="submit" value="Login">
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script>
+    async function login(event) {
+        event.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        const { data, error } = await supabase.from('employees')
+            .select('*')
+            .eq('username', username)
+            .eq('password', password);
+
+        if (error) return handleError(error);
+        
+        if (data.length > 0) {
+            alert("Login successful!");
+            window.location.href = "dashboard.html";
+        } else {
+            alert("Invalid credentials, please try again.");
+        }
+    }
+</script>
